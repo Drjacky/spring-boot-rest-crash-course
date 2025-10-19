@@ -1,7 +1,7 @@
 package app.web.drjacky.service
 
 import kong.unirest.Unirest
-import model.TimeApiResponse
+import app.web.drjacky.model.TimeApiResponse
 
 class TimeServiceImpl : TimeService {
     override fun getCurrentTime(area: String): String {

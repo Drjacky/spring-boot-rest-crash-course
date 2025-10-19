@@ -1,4 +1,4 @@
-package model
+package app.web.drjacky.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
