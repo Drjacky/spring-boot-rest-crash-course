@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service
 import kotlin.collections.set
 
 @Service
-class UserServiceImpl : UserService {
+class UserServiceImpl(private val timeService: TimeService) : UserService {
 
     private val userMap = HashMap<String, User>().also {
         it["drjacky"] = User(1, "Dr", "Jacky")
@@ -14,7 +14,10 @@ class UserServiceImpl : UserService {
 
     override fun getUser(userName: String) = userMap.get(userName)
 
-    override fun addUser(user: User) = userMap.put(user.firstName, user)
+    override fun addUser(user: User): User? {
+        val tempUser = user.copy(creationTime = timeService.getCurrentTime("UTC"))
+        return userMap.put(tempUser.firstName, tempUser)
+    }
 
     override fun deleteUser(userName: String) = userMap.remove(userName)
 
