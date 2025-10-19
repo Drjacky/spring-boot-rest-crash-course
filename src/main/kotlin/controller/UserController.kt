@@ -1,6 +1,7 @@
 package app.web.drjacky.controller
 
 import app.web.drjacky.model.User
+import app.web.drjacky.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -11,12 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class UserController {
-
-    private val userMap = HashMap<String, User>().also {
-        it["drjacky"] = User(1, "Dr", "Jacky")
-        it["blah"] = User(2, "Bl", "a")
-    }
+class UserController(private val userService: UserService) {
 
     @GetMapping("/getUser")
     fun getUser() = "Drjacky"
@@ -25,11 +21,11 @@ class UserController {
     fun getUserByModel() = User(1, "Dr", "Jacky")
 
     @GetMapping("/getUserByUserName/{userName}")
-    fun getUserByUserName(@PathVariable userName: String) = userMap.get(userName)
+    fun getUserByUserName(@PathVariable userName: String) = userService.getUser(userName)
 
     @GetMapping("/getUserByUserNameV2/{userName}")
     fun getUserByUserNameV2(@PathVariable userName: String): ResponseEntity<User>? {
-        return userMap[userName]?.let { user ->
+        return userService.getUser(userName)?.let { user ->
             ResponseEntity.ok(user)
         } ?: ResponseEntity.notFound().build()
 
@@ -37,13 +33,13 @@ class UserController {
 
     @PostMapping("/addUser")
     fun addUser(@RequestBody user: User): ResponseEntity<HttpStatus> {
-        userMap[user.firstName] = user
+        userService.addUser(user)
         return ResponseEntity.accepted().build()
     }
 
     @DeleteMapping("/deleteUser/{userName}")
-    fun deleteUser(@RequestBody user: User): ResponseEntity<HttpStatus> {
-        userMap.remove(user.firstName)
+    fun deleteUser(@RequestBody userName: String): ResponseEntity<HttpStatus> {
+        userService.deleteUser(userName)
         return ResponseEntity.noContent().build()
     }
 
