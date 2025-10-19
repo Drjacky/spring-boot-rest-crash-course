@@ -15,7 +15,7 @@ class UserServiceImpl(private val timeService: TimeService) : UserService {
     override fun getUser(userName: String) = userMap.get(userName)
 
     override fun addUser(user: User): User? {
-        val tempUser = user.copy(creationTime = timeService.getCurrentTime("UTC"))
+        val tempUser = user.copy(creationTime = timeService.getCurrentTime("Dublin"))
         return userMap.put(tempUser.firstName, tempUser)
     }
 
