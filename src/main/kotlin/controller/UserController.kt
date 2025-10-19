@@ -3,6 +3,7 @@ package app.web.drjacky.controller
 import app.web.drjacky.model.User
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -30,6 +31,12 @@ class UserController {
     fun addUser(@RequestBody user: User): ResponseEntity<HttpStatus> {
         userMap[user.firstName] = user
         return ResponseEntity.accepted().build()
+    }
+
+    @DeleteMapping("/deleteUser/{userName}")
+    fun deleteUser(@RequestBody user: User): ResponseEntity<HttpStatus> {
+        userMap.remove(user.firstName)
+        return ResponseEntity.noContent().build()
     }
 
 }
