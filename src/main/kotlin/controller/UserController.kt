@@ -27,6 +27,14 @@ class UserController {
     @GetMapping("/getUserByUserName/{userName}")
     fun getUserByUserName(@PathVariable userName: String) = userMap.get(userName)
 
+    @GetMapping("/getUserByUserNameV2/{userName}")
+    fun getUserByUserNameV2(@PathVariable userName: String): ResponseEntity<User>? {
+        return userMap[userName]?.let { user ->
+            ResponseEntity.ok(user)
+        } ?: ResponseEntity.notFound().build()
+
+    }
+
     @PostMapping("/addUser")
     fun addUser(@RequestBody user: User): ResponseEntity<HttpStatus> {
         userMap[user.firstName] = user
