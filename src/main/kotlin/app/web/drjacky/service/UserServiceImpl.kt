@@ -1,24 +1,26 @@
 package app.web.drjacky.service
 
+import app.web.drjacky.data.UserEntity
+import app.web.drjacky.data.UserRepository
+import app.web.drjacky.mapper.EntityMapper
 import app.web.drjacky.model.User
 import org.springframework.stereotype.Service
-import kotlin.collections.set
 
 @Service
-class UserServiceImpl(private val timeService: TimeService) : UserService {
+class UserServiceImpl(
+    private val timeService: TimeService,
+    private val userRepository: UserRepository,
+    private val entityMapper: EntityMapper<UserEntity, User>
+) : UserService {
 
-    private val userMap = HashMap<String, User>().also {
-        it["drjacky"] = User(1, "Dr", "Jacky")
-        it["blah"] = User(2, "Bl", "a")
-    }
+    override fun getUser(userName: String) =
+        entityMapper.toModel(userRepository.findByFirstName(userName))
 
-    override fun getUser(userName: String) = userMap.get(userName)
-
-    override fun addUser(user: User): User? {
+    override fun addUser(user: User) {
         val tempUser = user.copy(creationTime = timeService.getCurrentTime("Dublin"))
-        return userMap.put(tempUser.firstName, tempUser)
+        userRepository.save(entityMapper.toEntity(tempUser))
     }
 
-    override fun deleteUser(userName: String) = userMap.remove(userName)
+    override fun deleteUser(userName: String) = userRepository.deleteByFirstName(userName)
 
 }
