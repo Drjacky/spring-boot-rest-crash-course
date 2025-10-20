@@ -4,6 +4,7 @@ import app.web.drjacky.data.UserEntity
 import app.web.drjacky.data.UserRepository
 import app.web.drjacky.mapper.EntityMapper
 import app.web.drjacky.model.User
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
@@ -21,6 +22,7 @@ class UserServiceImpl(
         userRepository.save(entityMapper.toEntity(tempUser))
     }
 
+    @Transactional
     override fun deleteUser(userName: String) = userRepository.deleteByFirstName(userName)
 
 }
