@@ -1,0 +1,3 @@
+api:
+  endpoint: "https://world-time-api3.p.rapidapi.com/timezone/"
+  continent: "Europe"
